@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome -->
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+    
+    body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7f6;
+    padding: 20px;
+    }
+    
+    h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    }
+    
+    .post-card {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    }
+    
+    .post-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    }
+    
+    .post-username {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    }
+    
+    .post-timestamp {
+    font-size: 12px;
+    color: #888;
+    }
+    
+    .post-content {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    }
+    
+    .post-photo {
+    margin-top: 15px;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 250px;
+    border-radius: 8px;
+    }
+    
+    .post-footer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    .like-button {
+    cursor: pointer;
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid #008CBA;
+    border-radius: 5px;
+    color: #008CBA;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .like-button:hover {
+    background-color: #008CBA;
+    color: white;
+    }
+    
+    .like-button.liked {
+    background-color: #e0245e;
+    color: white;
+    }
+    
+    .like-count {
+    background-color: #008CBA;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    }
+    
+    .delete-icon {
+    cursor: pointer;
+    color: red;
+    font-size: 18px;
+    transition: transform 0.2s;
+    }
+    
+    .delete-icon:hover {
+    transform: scale(1.2);
+    }
+    
+    .login-form, .logout-button {
+    text-align: center;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-form input {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    }
+    
+    .login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+    
+    .login-form button:hover {
+    background-color: #006f99;
+    }
+    
+    .login-form p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+    }
+    
+    .login-form a {
+    color: #008CBA;
+    text-decoration: none;
+    }
+    
+    .login-form a:hover {
+    text-decoration: underline;
+    }
+    </style>
+    
+</head>
+<body>
+    <h1>Your Posts</h1>
+
+    <!-- Login Form -->
+    <div class="login-form" id="login-form">
+        <h4> প্রথমে সাইন ইন কর</h4>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="signIn()">Sign In</button>
+        <p>Don't have an account? <a href="#" onclick="showSignUpForm()">Sign Up</a></p>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div class="login-form" id="signup-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <input type="email" id="signup-email" placeholder="Email" required>
+        <input type="password" id="signup-password" placeholder="Password" required>
+        <button onclick="signUp()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="logout-button" id="logout-button" style="display: none;">
+        <button onclick="logOut()">Log Out</button>
+    </div>
+
+    <div id="posts-container"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getDatabase, ref, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsz-82MDaibWnIBUpoykrZHyJW7UMedX8",
+            authDomain: "movies-bee24.firebaseapp.com",
+            databaseURL: "https://movies-bee24-default-rtdb.firebaseio.com",
+            projectId: "movies-bee24",
+            storageBucket: "movies-bee24.appspot.com",
+            messagingSenderId: "1080659811750",
+            appId: "1:1080659811750:web:c1ef7d4dacc3ab17edc367"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+
+        // Display posts only after the user is signed in
+        function loadPosts() {
+            const postsRef = ref(db, 'posts');
+            const user = auth.currentUser;
+
+            if (user) {
+                const userId = user.uid;
+
+                get(postsRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const postsContainer = document.getElementById('posts-container');
+                        postsContainer.innerHTML = ''; // Clear previous posts
+
+                        snapshot.forEach((childSnapshot) => {
+                            const post = childSnapshot.val();
+                            const postId = childSnapshot.key;
+
+                            if (post.userId === userId) {
+                                const postElement = document.createElement('div');
+                                postElement.classList.add('post-card');
+
+                                // Get user details for profile photo
+                                const userRef = ref(db, `users/${post.userId}`);
+                                get(userRef).then((userSnapshot) => {
+                                    const userData = userSnapshot.val();
+                                    const userName = userData.name || 'Anonymous';
+                                    const userProfilePhoto = userData.profilePhoto || 'default-profile.png';
+
+                                    postElement.innerHTML = `
+                                        <div class="post-header">
+                                            <img src="${userProfilePhoto}" alt="Profile Photo" />
+                                            <div>
+                                                <div class="post-username">${userName}</div>
+                                                <div class="post-timestamp">${new Date(post.timestamp).toLocaleString()}</div>
+                                            </div>
+                                            <i class="fas fa-trash delete-icon" onclick="deletePost('${postId}')"></i>
+                                        </div>
+                                        <div class="post-content"><p>${post.text || ''}</p></div>
+                                        ${post.imageUrl ? `<div class="post-photo" style="background-image: url(${post.imageUrl});"></div>` : ''}
+                                        <div class="post-footer">
+                                            <button class="like-button ${post.likedBy && post.likedBy[userId] ? 'liked' : ''}" onclick="likePost('${postId}')">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                            <div class="like-count">${post.likeCount || 0}</div>
+                                        </div>
+                                    `;
+                                });
+
+                                postsContainer.appendChild(postElement);
+                            }
+                        });
+                    } else {
+                        console.log("No posts found!");
+                    }
+                }).catch((error) => {
+                    console.error("Error fetching posts:", error);
+                });
+            } else {
+                console.log("No user is logged in.");
+            }
+        }
+
+        // Sign In function
+        window.signIn = function() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in successfully
+                    console.log("Signed In!");
+                    loadPosts();
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('signup-form').style.display = 'none';
+                    document.getElementById('logout-button').style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Sign Up function
+        window.signUp = function() {
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log("Signed Up!");
+                    loadPosts();
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('signup-form').style.display = 'none';
+                    document.getElementById('logout-button').style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Log out function
+        window.logOut = function() {
+            signOut(auth).then(() => {
+                console.log("Signed out!");
+                document.getElementById('logout-button').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+                loadPosts();
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+
+        // Delete post function
+        window.deletePost = function(postId) {
+            const postRef = ref(db, 'posts/' + postId);
+            remove(postRef)
+                .then(() => {
+                    console.log("Post deleted successfully!");
+                    loadPosts();  // Reload the posts after deletion
+                })
+                .catch((error) => {
+                    console.error("Error deleting post:", error);
+                });
+        }
+
+        // Call loadPosts when the page loads
+        loadPosts();
+    </script>
+</body>
+</html>
